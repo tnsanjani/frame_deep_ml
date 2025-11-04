@@ -263,10 +263,10 @@ def main():
                 conditions_latent_ref = vae.encode(last_left_rgb_noisy).latent_dist.mode()
                 conditions_latent_ref = conditions_latent_ref.unsqueeze(1).repeat(1, args.num_frames, 1, 1, 1)
 
-        
-                left_rgb_frames = left_data['pixel_values'][:, 1:-1] 
-                num_target_frames = left_rgb_frames.shape[1]
-                pixel_values = rearrange(left_rgb_frames, "b f c h w -> (b f) c h w").to(accelerator.device, dtype=weight_dtype)
+                #target right rgb frames
+                right_rgb_frames = right_data['pixel_values'][:, 1:-1] 
+                num_target_frames = right_rgb_frames.shape[1]
+                pixel_values = rearrange(right_rgb_frames, "b f c h w -> (b f) c h w").to(accelerator.device, dtype=weight_dtype)
 
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 latents = latents * vae.config.scaling_factor
